@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pydantic
+numpy
+tensorflow
+Pillow
+opencv-python
+matplotlib
+fastapi-mail
+pymongo
+python-multipart
+email-validator
+psycopg2-binary
+python-dotenv

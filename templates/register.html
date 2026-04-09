@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Especialista</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem 3rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px; /* Increased width for more fields */
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        form {
+            display: grid; /* Use grid for better alignment */
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            text-align: left;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        label {
+            color: #555;
+            margin-bottom: 0.2rem;
+            font-weight: 500;
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+        .switch-link {
+            margin-top: 1.5rem;
+        }
+        .switch-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registro de Especialista</h1>
+        <form id="registerForm">
+            <div class="field">
+                <label for="PNombre">Primer Nombre:</label>
+                <input type="text" id="PNombre" name="PNombre" required>
+            </div>
+            <div class="field">
+                <label for="SNombre">Segundo Nombre:</label>
+                <input type="text" id="SNombre" name="SNombre" required>
+            </div>
+            <div class="field">
+                <label for="PApellido">Primer Apellido:</label>
+                <input type="text" id="PApellido" name="PApellido" required>
+            </div>
+            <div class="field">
+                <label for="SApellido">Segundo Apellido:</label>
+                <input type="text" id="SApellido" name="SApellido" required>
+            </div>
+            <div class="full-width">
+                <label for="Cedula">Cédula:</label>
+                <input type="text" id="Cedula" name="Cedula" required>
+            </div>
+            <div class="full-width">
+                <label for="Correo">Correo Electrónico:</label>
+                <input type="email" id="Correo" name="Correo" required>
+            </div>
+            <div class="full-width">
+                <label for="Tlf">Teléfono:</label>
+                <input type="tel" id="Tlf" name="Tlf" required>
+            </div>
+            <div class="full-width">
+                <label for="Contraseña">Contraseña:</label>
+                <input type="password" id="Contraseña" name="Contraseña" required>
+            </div>
+            <div class="full-width">
+                <label for="Cargo">Cargo (número):</label>
+                <input type="number" id="Cargo" name="Cargo" required>
+            </div>
+            <div class="full-width">
+                <button type="submit">Registrar</button>
+            </div>
+        </form>
+        <p id="message" class="full-width"></p>
+        <p class="switch-link full-width">
+            ¿Ya tienes una cuenta? <a href="index.html" target="_blank">Inicia Sesión</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const PNombre = document.getElementById('PNombre').value;
+            const SNombre = document.getElementById('SNombre').value;
+            const PApellido = document.getElementById('PApellido').value;
+            const SApellido = document.getElementById('SApellido').value;
+            const Cedula = document.getElementById('Cedula').value;
+            const Correo = document.getElementById('Correo').value;
+            const Tlf = document.getElementById('Tlf').value;
+            const Contraseña = document.getElementById('Contraseña').value;
+            const Cargo = document.getElementById('Cargo').value;
+            
+            const messageElement = document.getElementById('message');
+
+            try {
+                const response = await fetch('http://127.0.0.1:1234/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        PNombre,
+                        SNombre,
+                        PApellido,
+                        SApellido,
+                        Cedula,
+                        Correo,
+                        Tlf,
+                        Contraseña,
+                        Cargo: parseInt(Cargo, 10) // Ensure Cargo is an integer
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageElement.textContent = data.message + ' Redirigiendo a la página de verificación...';
+                    messageElement.style.color = 'green';
+                    // Guarda el email para la página de verificación
+                    localStorage.setItem('userEmailForVerification', Correo);
+                    setTimeout(() => {
+                        window.location.href = 'verify.html';
+                    }, 3000); // Redirige después de 3 segundos
+                } else {
+                    messageElement.textContent = data.detail || 'Ocurrió un error';
+                    messageElement.style.color = 'red';
+                }
+            } catch (error) {
+                messageElement.textContent = 'Fallo al conectar con la API.';
+                messageElement.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

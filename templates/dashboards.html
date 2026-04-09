@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeumoAI - Dashboard</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="lung-icon-small"></div>
+                <h2>NeumoAI</h2>
+            </div>
+            
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+                <div class="user-info">
+                    <p class="user-name" id="doctor-name">Dr. Nombre Apellido</p>
+                    <p class="user-role" id="doctor-specialty">Especialidad</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="overview">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Resumen</span>
+                </a>
+                <a href="#" class="nav-item" data-section="patients">
+                    <i class="fas fa-user-injured"></i>
+                    <span>Pacientes</span>
+                </a>
+                <a href="#" class="nav-item" data-section="evaluations">
+                    <i class="fas fa-x-ray"></i>
+                    <span>Evaluaciones</span>
+                </a>
+                <a href="#" class="nav-item" data-section="history">
+                    <i class="fas fa-history"></i>
+                    <span>Historial</span>
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <i class="fas fa-cogs"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <button class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </button>
+        </div>
+
+        <div class="main-content">
+            <div class="content-header">
+                <h1 id="section-title">Resumen</h1>
+            </div>
+
+            <div class="content-section active" id="overview-section">
+                <p>Bienvenido, Dr. <span id="welcome-doctor-name"></span>. Aquí puedes ver un resumen de tu actividad.</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Total Pacientes</h3>
+                        <p id="total-patients">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Evaluaciones Realizadas</h3>
+                        <p id="total-evaluations">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section" id="patients-section">
+                <h2>Gestión de Pacientes</h2>
+                <div class="form-container">
+                    <div class="form-toggle">
+                        <button class="toggle-btn active" id="add-patient-toggle">Añadir Nuevo</button>
+                        <button class="toggle-btn" id="view-patients-toggle">Ver Todos</button>
+                    </div>
+                    
+                    <form id="add-patient-form" class="form active">
+                        <h3 class="form-title">Datos del Paciente</h3>
+                        
+                        <div class="name-fields">
+                            <div class="input-group">
+                                <label for="patient-primer-nombre">Primer Nombre *</label>
+                                <input type="text" id="patient-primer-nombre" required placeholder="Ej: Juan">
+                            </div>
+                            <div class="input-group">
+                                <label for="patient-segundo-nombre">Segundo Nombre</label>
+                                <input type="text" id="patient-segundo-nombre" placeholder="Ej: David">
+                            </div>
+                        </div>
+                        
+                        <div class="name-fields">
+                            <div class="input-group">
+                                <label for="patient-primer-apellido">Primer Apellido *</label>
+                                <input type="text" id="patient-primer-apellido" required placeholder="Ej: Pérez">
+                            </div>
+                            <div class="input-group">
+                                <label for="patient-segundo-apellido">Segundo Apellido</label>
+                                <input type="text" id="patient-segundo-apellido" placeholder="Ej: Vásquez">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="patient-cedula">Cédula de Identidad *</label>
+                            <input type="text" id="patient-cedula" required maxlength="10" placeholder="Ej: 98765432"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            <small class="input-hint">Solo números (8-10 dígitos)</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="patient-telefono">Número de Teléfono *</label>
+                            <input type="tel" id="patient-telefono" required placeholder="Ej: 04121234567" maxlength="11"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            <small class="input-hint">11 dígitos, debe comenzar con 04</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="patient-email">Correo Electrónico</label>
+                            <input type="email" id="patient-email" placeholder="Ej: paciente@email.com">
+                        </div>
+                        
+                        <button type="submit" class="btn">Guardar Paciente</button>
+                        <div id="patient-message" class="message"></div>
+                    </form>
+
+                    <div id="view-patients-section" class="form">
+                        <h3 class="form-title">Mis Pacientes</h3>
+                        <div id="patient-list" class="patient-list">
+                            </div>
+                        <div id="no-patients-message" style="display: none; text-align: center; color: #6c757d; margin-top: 20px;">
+                            Todavía no tienes pacientes registrados.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div class="content-section" id="evaluations-section">
+    <h2>Nueva Evaluación de Radiografía</h2>
+
+    <div class="form-container" style="margin-top: 20px;">
+        <form id="evaluation-form" class="form active">
+            <h3 class="form-title">Cargar Imagen</h3>
+
+            <div class="input-group">
+                <label for="xray-file" class="required-field">Seleccionar archivo de imagen</label>
+                <div class="image-preview-container">
+                    <input type="file" id="xray-file" accept="image/jpeg, image/png" required style="padding: 10px; border: 1px solid var(--border); border-radius: 5px;">
+                    <img id="image-preview" src="#" alt="Previsualización de Radiografía" style="display: none;"/>
+                </div>
+                 <small class="input-hint">Formatos aceptados: JPG, JPEG, PNG.</small>
+            </div>
+
+            <button type="submit" class="btn">Analizar Radiografía</button>
+        </form>
+
+        <div id="evaluation-result" style="display: none; margin-top: 30px;">
+            <h3 class="form-title">Resultado del Análisis</h3>
+            <div class="result-images-container">
+                <div class="result-image-card">
+                    <h4>Radiografía Original</h4>
+                    <img id="result-original-image" src="#" alt="Radiografía Original Cargada">
+                </div>
+                <div class="result-image-card">
+                    <h4>Mapa de Activación (Grad-CAM)</h4>
+                    <img id="result-heatmap-image" src="#" alt="Visualización IA (Futuro)">
+                    <small>(Visualización de IA disponible próximamente)</small>
+                </div>
+            </div>
+
+            <div class="stat-card" style="text-align: left; align-items: flex-start; background-color: #f8f9fa; border: 1px solid var(--border); margin-top: 20px;">
+                <h4 id="result-text" style="font-size: 24px; margin-bottom: 10px;"></h4>
+                <p style="font-size: 18px;">Confianza: <strong id="result-confidence"></strong></p>
+                <hr style="width: 100%; margin: 15px 0; border-top: 1px solid var(--border);">
+                <p style="font-size: 14px; color: #555;">Detalle Probabilidades: <span id="result-detail"></span></p>
+            </div>
+            <div id="evaluation-message" class="message" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+</div>
+    
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
